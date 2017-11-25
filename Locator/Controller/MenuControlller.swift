@@ -28,18 +28,14 @@ class MenuControlller : NSObject, UICollectionViewDataSource, UICollectionViewDe
         return imageView
     }()
     
-    let closeDrawerImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.layer.masksToBounds = true
-        imageView.contentMode = .scaleAspectFill
-        imageView.image = UIImage(named: "ic_keyboard_backspace_white")?.withRenderingMode(.alwaysOriginal)
-        imageView.tintColor = UIColor.white
-        
-        
-        //add handler to dismiss overlay when clicked
-        imageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(dismissMenu)))
-        imageView.isUserInteractionEnabled = true
-        return imageView
+    let closeDrawerButton: UIButton = {
+        let button = UIButton()
+        button.layer.masksToBounds = true
+        button.contentMode = .scaleAspectFill
+        button.setImage(UIImage(named: "ic_keyboard_backspace_white"), for: [])
+        button.tintColor = UIColor.white
+
+        return button
     }()
     
     let profileDecoratorLineView: UIView = {
@@ -101,6 +97,7 @@ class MenuControlller : NSObject, UICollectionViewDataSource, UICollectionViewDe
             overlayView.backgroundColor = UIColor(white: 0, alpha: 0.5)
             //add handler to dismiss overlay when clicked
             overlayView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(dismissMenu)))
+            closeDrawerButton.addTarget(self, action: #selector(dismissMenu), for:.touchUpInside)
             window.addSubview(overlayView)
 
             drawerControllerView.addSubview(collectionView)
@@ -125,10 +122,10 @@ class MenuControlller : NSObject, UICollectionViewDataSource, UICollectionViewDe
 
             
             //close drawer controller image view
-            profileHeaderView.addSubview(closeDrawerImageView)
+            profileHeaderView.addSubview(closeDrawerButton)
             
-            profileHeaderView.addConstraintsWithFormat(format: "H:|-15-[v0(35)]", views: closeDrawerImageView)
-            profileHeaderView.addConstraintsWithFormat(format: "V:|-10-[v0(35)]", views: closeDrawerImageView)
+            profileHeaderView.addConstraintsWithFormat(format: "H:|-15-[v0(35)]", views: closeDrawerButton)
+            profileHeaderView.addConstraintsWithFormat(format: "V:|-10-[v0(35)]", views: closeDrawerButton)
             
             //user name profile name
             profileHeaderView.addSubview(usernameUILabel)
