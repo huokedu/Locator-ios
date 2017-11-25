@@ -1,5 +1,5 @@
 //
-//  FormatUtils.swift
+//  Helper.swift
 //  Locator
 //
 //  Created by Innocent Magagula on 11/18/17.
@@ -8,6 +8,11 @@
 
 import Foundation
 
-class FormatUtils: NSObject {
+class Helper {
     
+    static func formatNumber(number: NSNumber,formatStyle: NumberFormatter.Style) -> String {
+        let numberFormatter = NumberFormatter()
+        numberFormatter.numberStyle = formatStyle
+        return numberFormatter.string(from: number)!
+    }
 }

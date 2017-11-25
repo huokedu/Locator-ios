@@ -14,12 +14,6 @@ extension UIColor{
     }
 }
 
-
-//this helps for easy adding of contraints
-//avoid code repetation eg
-
-//    addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(),
-//    addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v0(2)]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0" : separatorView]))
 extension UIView{
 
     func addConstraintsWithFormat(format: String, views: UIView...){
@@ -30,5 +24,53 @@ extension UIView{
             viewsDictionery[key] = view
         }
         addConstraints(NSLayoutConstraint.constraints(withVisualFormat: format, options: NSLayoutFormatOptions(), metrics: nil, views: viewsDictionery))        
+    }
+    
+    func centerX(view: UIView) {
+        addConstraint(NSLayoutConstraint(item: view, attribute: .centerX, relatedBy: .equal, toItem: self, attribute: .centerX, multiplier: 1, constant: 0))
+    }
+    
+    func centerY(view: UIView) {
+        addConstraint(NSLayoutConstraint(item: view, attribute: .centerY, relatedBy: .equal, toItem: self, attribute: .centerY, multiplier: 1, constant: 0))
+    }
+}
+
+//image cache
+let imageCache = NSCache<AnyObject, AnyObject>()
+
+class BufferImageView: UIImageView {
+    
+    var imageUrlSring: String?
+    
+    func loadImagefromUrl(urlString: String){
+        
+        imageUrlSring = urlString
+        
+        let url = URL(string: urlString)
+        
+        image = nil
+        
+        if let imageFromCache = imageCache.object(forKey: urlString as AnyObject) as? UIImage {
+            self.image = imageFromCache
+            return
+        }
+        
+        
+        URLSession.shared.dataTask(with: url!){data, response, error in
+            if error != nil{
+                print(error!)
+                return
+            }
+            
+            DispatchQueue.main.async {
+                let imageToCache = UIImage(data: data!)
+                
+                if self.imageUrlSring == urlString {
+                     self.image = imageToCache
+                }
+                imageCache.setObject(imageToCache!, forKey: urlString as AnyObject)
+            }
+            
+            }.resume()
     }
 }

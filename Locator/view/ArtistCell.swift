@@ -19,12 +19,10 @@ class ArtistCell: BaseCell{
                 titleLabel.text = title
             }
 
-            if let userPic = artist?.thumbnailImage{
-                thumbnailImageView.image = UIImage(named: (userPic))
-            }
+            setupThumbNailImage()
             
-            if let profilePic = UIImage(named:(artist?.userProfileImage)!) {
-                userProfileImageView.image = profilePic
+            if let profilePicUrl = artist?.userProfileImage {
+                userProfileImageView.loadImagefromUrl(urlString: profilePicUrl)
             }
             else{
                 userProfileImageView.image = UIImage(named: "innocent")
@@ -53,16 +51,16 @@ class ArtistCell: BaseCell{
     }
     
     //create the image view
-    let thumbnailImageView: UIImageView = {
-        let imageview = UIImageView()
+    let thumbnailImageView: BufferImageView = {
+        let imageview = BufferImageView()
         imageview.contentMode = .scaleAspectFill
         imageview.clipsToBounds = true
         return imageview
     }()
     
     //create the user profile view
-    let userProfileImageView: UIImageView = {
-        let imageview = UIImageView()
+    let userProfileImageView: BufferImageView = {
+        let imageview = BufferImageView()
         //making is circular require half of the with an heigh of the image
         imageview.layer.cornerRadius = 22
         imageview.layer.masksToBounds = true
@@ -94,6 +92,13 @@ class ArtistCell: BaseCell{
     }()
     
     var titleLabelContraint: NSLayoutConstraint?
+    
+    func setupThumbNailImage(){
+        
+        if let thumbnailImageUrl = artist?.thumbnailImage {
+            thumbnailImageView.loadImagefromUrl(urlString: thumbnailImageUrl)
+        }
+    }
     
     override func setupViews(){
         //add to view

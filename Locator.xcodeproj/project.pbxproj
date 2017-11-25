@@ -7,6 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F705EB061FC036D700A1AA26 /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F705EB051FC036D700A1AA26 /* Helper.swift */; };
+		F705EB091FC03AF000A1AA26 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F705EB081FC03AF000A1AA26 /* DataManager.swift */; };
+		F705EB0B1FC059A100A1AA26 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = F705EB0A1FC059A100A1AA26 /* User.swift */; };
+		F705EB0D1FC05C0200A1AA26 /* Club.swift in Sources */ = {isa = PBXBuildFile; fileRef = F705EB0C1FC05C0200A1AA26 /* Club.swift */; };
+		F705EB0F1FC05C0C00A1AA26 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = F705EB0E1FC05C0C00A1AA26 /* Event.swift */; };
+		F705EB111FC1938300A1AA26 /* MenuControlller.swift in Sources */ = {isa = PBXBuildFile; fileRef = F705EB101FC1938300A1AA26 /* MenuControlller.swift */; };
+		F705EB131FC1A38400A1AA26 /* MenuCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F705EB121FC1A38400A1AA26 /* MenuCell.swift */; };
+		F705EB161FC1AAA100A1AA26 /* Menu.swift in Sources */ = {isa = PBXBuildFile; fileRef = F705EB151FC1AAA100A1AA26 /* Menu.swift */; };
 		F72A79FF1FB6D94D00FC5BE7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72A79FE1FB6D94D00FC5BE7 /* AppDelegate.swift */; };
 		F72A7A011FB6D94D00FC5BE7 /* HomeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72A7A001FB6D94D00FC5BE7 /* HomeController.swift */; };
 		F72A7A041FB6D94D00FC5BE7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F72A7A021FB6D94D00FC5BE7 /* Main.storyboard */; };
@@ -40,6 +48,14 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		F705EB051FC036D700A1AA26 /* Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
+		F705EB081FC03AF000A1AA26 /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
+		F705EB0A1FC059A100A1AA26 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		F705EB0C1FC05C0200A1AA26 /* Club.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Club.swift; sourceTree = "<group>"; };
+		F705EB0E1FC05C0C00A1AA26 /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
+		F705EB101FC1938300A1AA26 /* MenuControlller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuControlller.swift; sourceTree = "<group>"; };
+		F705EB121FC1A38400A1AA26 /* MenuCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuCell.swift; sourceTree = "<group>"; };
+		F705EB151FC1AAA100A1AA26 /* Menu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Menu.swift; sourceTree = "<group>"; };
 		F72A79FB1FB6D94D00FC5BE7 /* Locator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Locator.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F72A79FE1FB6D94D00FC5BE7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F72A7A001FB6D94D00FC5BE7 /* HomeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeController.swift; sourceTree = "<group>"; };
@@ -86,6 +102,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		F705EB071FC03ADD00A1AA26 /* data */ = {
+			isa = PBXGroup;
+			children = (
+				F705EB081FC03AF000A1AA26 /* DataManager.swift */,
+			);
+			path = data;
+			sourceTree = "<group>";
+		};
 		F72A79F21FB6D94D00FC5BE7 = {
 			isa = PBXGroup;
 			children = (
@@ -109,6 +133,7 @@
 		F72A79FD1FB6D94D00FC5BE7 /* Locator */ = {
 			isa = PBXGroup;
 			children = (
+				F705EB071FC03ADD00A1AA26 /* data */,
 				F7A8FA3B1FB727DA005E1ED9 /* model */,
 				F72A7A2F1FB6DB6600FC5BE7 /* view */,
 				F72A7A301FB6DB8A00FC5BE7 /* Controller */,
@@ -147,6 +172,7 @@
 				F72A7A341FB7076500FC5BE7 /* ArtistCell.swift */,
 				F72A7A361FB708DB00FC5BE7 /* MenuBar.swift */,
 				F72A7A381FB7147900FC5BE7 /* BaseCell.swift */,
+				F705EB121FC1A38400A1AA26 /* MenuCell.swift */,
 			);
 			path = view;
 			sourceTree = "<group>";
@@ -155,6 +181,7 @@
 			isa = PBXGroup;
 			children = (
 				F72A7A001FB6D94D00FC5BE7 /* HomeController.swift */,
+				F705EB101FC1938300A1AA26 /* MenuControlller.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -163,6 +190,7 @@
 			isa = PBXGroup;
 			children = (
 				F72A7A321FB706B100FC5BE7 /* Extensions.swift */,
+				F705EB051FC036D700A1AA26 /* Helper.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -171,6 +199,10 @@
 			isa = PBXGroup;
 			children = (
 				F7A8FA3C1FB7281C005E1ED9 /* Artist.swift */,
+				F705EB0A1FC059A100A1AA26 /* User.swift */,
+				F705EB0C1FC05C0200A1AA26 /* Club.swift */,
+				F705EB0E1FC05C0C00A1AA26 /* Event.swift */,
+				F705EB151FC1AAA100A1AA26 /* Menu.swift */,
 			);
 			path = model;
 			sourceTree = "<group>";
@@ -310,13 +342,21 @@
 			buildActionMask = 2147483647;
 			files = (
 				F72A7A071FB6D94D00FC5BE7 /* Locator.xcdatamodeld in Sources */,
+				F705EB091FC03AF000A1AA26 /* DataManager.swift in Sources */,
 				F72A7A011FB6D94D00FC5BE7 /* HomeController.swift in Sources */,
 				F72A7A371FB708DB00FC5BE7 /* MenuBar.swift in Sources */,
 				F72A79FF1FB6D94D00FC5BE7 /* AppDelegate.swift in Sources */,
 				F72A7A391FB7147900FC5BE7 /* BaseCell.swift in Sources */,
 				F72A7A351FB7076500FC5BE7 /* ArtistCell.swift in Sources */,
+				F705EB0D1FC05C0200A1AA26 /* Club.swift in Sources */,
+				F705EB061FC036D700A1AA26 /* Helper.swift in Sources */,
 				F7A8FA3D1FB7281C005E1ED9 /* Artist.swift in Sources */,
+				F705EB161FC1AAA100A1AA26 /* Menu.swift in Sources */,
 				F72A7A331FB706B100FC5BE7 /* Extensions.swift in Sources */,
+				F705EB131FC1A38400A1AA26 /* MenuCell.swift in Sources */,
+				F705EB0B1FC059A100A1AA26 /* User.swift in Sources */,
+				F705EB111FC1938300A1AA26 /* MenuControlller.swift in Sources */,
+				F705EB0F1FC05C0C00A1AA26 /* Event.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

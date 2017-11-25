@@ -10,49 +10,58 @@ import UIKit
 
 class HomeController: UICollectionViewController,UICollectionViewDelegateFlowLayout {
 
-    var artists: [Artist] = {
-        var blackCoffee = Artist()
-        blackCoffee.eventTitle = "Ibiza"
-        blackCoffee.eventPlace = "FNB Stadium"
-        blackCoffee.location = "Soccer City Ave, Nasrec, Johannesburg"
-        blackCoffee.artistName = "Back Coffee"
-        blackCoffee.dateTime = "Tonight: 8pm till late "
-        blackCoffee.thumbnailImage = "black_coffee"
-        blackCoffee.userProfileImage = "back_coffee_face"
-        
-        var tira = Artist()
-        tira.artistName = "DJ Tira"
-        tira.eventPlace = "Eyadini Lounge"
-        tira.eventTitle = "Celebrating December"
-        tira.location = "3 Peace Rd, Umlazi, Durban"
-        tira.dateTime = "Tonight: 6pm to 6am "
-        tira.thumbnailImage = "tira"
-        tira.userProfileImage = "tira_face"
-        
-        var babes = Artist()
-        babes.artistName = "Babes Wodumo"
-        babes.eventTitle = "Gandaganda launch"
-        babes.eventPlace = "Moses Mabhida Stadium"
-        babes.location = "44 Isaiah Ntshangase Rd, Stamford Hill, Durban"
-        babes.dateTime = "Tonight:6pm till late"
-        babes.thumbnailImage = "babes_wodumo"
-        babes.userProfileImage = "babes_wodumo_face"
-        
-        var zodwa = Artist()
-        zodwa.artistName = "Zodwa Wabantu"
-        zodwa.eventPlace = "Eyadini Lounge"
-        zodwa.eventTitle = "Celebrating Youth Day"
-        zodwa.location = "Eyadini Lounge"
-        zodwa.dateTime = "Tommorrow: 9pm till late"
-        zodwa.thumbnailImage = "zodwa_wabantu"
-        zodwa.userProfileImage = "zodwa_wabantu_face"
-        
-        
-       return [blackCoffee,zodwa,tira,babes]
-    }()
+    var artists: [Artist]?
     
+    func fetchArtist(){
+        let url = URL(string: "http://www.omdbapi.com/?s=Batman&apikey=477f590b")
+        URLSession.shared.dataTask(with: url!){data, response, error in
+            
+            if error != nil{
+                print(error!)
+                return
+            }
+            
+            //check for valid json response
+            do{
+                let json = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
+                
+                if let totalResults = json as? [String: AnyObject]{
+                    
+                    self.artists = [Artist]()
+                    for dictionary in totalResults["Search"] as! [[String: AnyObject]]{
+                        
+                        let artist = Artist()
+                        artist.eventTitle = dictionary["Title"] as? String
+                        artist.eventPlace = "FNB Stadium"
+                        artist.location = "Soccer City Ave, Nasrec, Johannesburg"
+                        artist.artistName = "Batman"
+                        artist.dateTime = "Tonight: 8pm till late "
+                        artist.thumbnailImage = dictionary["Poster"] as? String
+                        artist.userProfileImage = dictionary["Poster"] as? String
+                        self.artists?.append(artist)
+                        
+                    }
+                }
+                DispatchQueue.main.async {
+                     self.collectionView?.reloadData()
+                }
+               
+            }
+            catch let jsonError {
+                //hande malformed error response
+                print(jsonError)
+            }
+            
+            
+            }.resume()
+        
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        //get artist
+        fetchArtist()
         
         //navigation item title
         navigationItem.title = "Celebrities"
@@ -93,18 +102,37 @@ class HomeController: UICollectionViewController,UICollectionViewDelegateFlowLay
         let searchImage = UIImage(named: "ic_search_white")?.withRenderingMode(.alwaysOriginal)
         let searchBarButtonItem = UIBarButtonItem(image: searchImage, style: .plain, target: self, action: #selector(handleSearchButtonTap))
         
-        let moreBarButtonItem = UIBarButtonItem(image: UIImage(named: "ic_more_vert_white")?.withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: #selector(handleMoreButtonTap))
+        let moreBarButtonItem = UIBarButtonItem(image: UIImage(named: "ic_more_vert_white")?.withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: #selector(handleShowMenuTap))
         
         navigationItem.rightBarButtonItems = [moreBarButtonItem,searchBarButtonItem]
+    }
+
+    
+    lazy var menuLauncher: MenuControlller = {
+        let menuController = MenuControlller()
+        menuController.homeController = self
+        return menuController
+    }()
+    
+    @objc func handleShowMenuTap() {
+        menuLauncher.showMenu()
+        
     }
 
     @objc func handleSearchButtonTap() {
         print("SEARCH")
     }
     
-    @objc func handleMoreButtonTap() {
-        print("MORE")
+
+    func showSettingViewController(menu: Menu) {
+        let controller = UIViewController()
+        controller.navigationItem.title = menu.name
+        controller.view.backgroundColor = UIColor.white
+        navigationController?.navigationBar.tintColor = UIColor.white
+        navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor: UIColor.white]
+        navigationController?.pushViewController(controller, animated: true)
     }
+        
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -112,14 +140,17 @@ class HomeController: UICollectionViewController,UICollectionViewDelegateFlowLay
     
     //return number of rows in table
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return artists.count
+     
+        //return count otherwise 0
+        return artists?.count ?? 0
+        
     }
     
     //return each cell
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cellId", for: indexPath) as! ArtistCell
         
-        cell.artist = artists[indexPath.item]
+        cell.artist = artists?[indexPath.item]
         
         return cell
     }

@@ -6,4 +6,10 @@
 //  Copyright © 2017 Tucksee. All rights reserved.
 //
 
-import Foundation
+import UIKit
+class User: NSObject {
+    
+    var profilePictureUrl: String?
+    var name: String?
+    var lastName: String?
+}

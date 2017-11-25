@@ -7,3 +7,10 @@
 //
 
 import Foundation
+
+class Datamanager{
+    
+    static func fetchArtists(){
+        
+    }
+}
