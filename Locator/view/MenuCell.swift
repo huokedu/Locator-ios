@@ -20,7 +20,7 @@ class MenuCell: BaseCell {
     
     var menu: Menu? {
         didSet{
-            menuNameLabel.text = menu?.name
+            menuNameLabel.text = menu?.name.rawValue
             
             if let imageName = menu?.imageName{
                 menuImageView.image = UIImage(named: imageName)?.withRenderingMode(.alwaysTemplate)

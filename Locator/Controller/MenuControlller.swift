@@ -65,7 +65,7 @@ class MenuControlller : NSObject, UICollectionViewDataSource, UICollectionViewDe
     let profilePictureImageView: UIImageView = {
         let imageview = UIImageView()
         //making is circular require half of the with an heigh of the image
-        imageview.layer.cornerRadius = 65
+        imageview.layer.cornerRadius = 55
         imageview.layer.masksToBounds = true
         imageview.contentMode = .scaleAspectFill
         imageview.image = UIImage(named: "innocent")
@@ -82,9 +82,9 @@ class MenuControlller : NSObject, UICollectionViewDataSource, UICollectionViewDe
     }()
     
     let menus: [Menu] = {
-        return [Menu(name: "Settings", imageName: "ic_settings"),
-                Menu(name: "Help", imageName: "ic_help"),
-                Menu(name: "Feedback", imageName: "ic_feedback")]
+        return [Menu(name: .Settings, imageName: "ic_settings"),
+                Menu(name: .Help, imageName: "ic_help"),
+                Menu(name: .Feedback, imageName: "ic_feedback")]
     }()
     
     var homeController: HomeController?
@@ -115,8 +115,8 @@ class MenuControlller : NSObject, UICollectionViewDataSource, UICollectionViewDe
             //user profile image
             profileHeaderView.addSubview(profilePictureImageView)
 
-            profileHeaderView.addConstraintsWithFormat(format: "H:[v0(130)]-20-|", views: profilePictureImageView)
-            profileHeaderView.addConstraintsWithFormat(format: "V:[v0(130)]", views: profilePictureImageView)
+            profileHeaderView.addConstraintsWithFormat(format: "H:[v0(110)]-20-|", views: profilePictureImageView)
+            profileHeaderView.addConstraintsWithFormat(format: "V:[v0(110)]", views: profilePictureImageView)
             
             profileHeaderView.centerY(view: profilePictureImageView)
 

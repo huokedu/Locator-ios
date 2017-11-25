@@ -10,61 +10,15 @@ import UIKit
 
 class HomeController: UICollectionViewController,UICollectionViewDelegateFlowLayout {
 
-    var artists: [Artist]?
-    
-    func fetchArtist(){
-        let url = URL(string: "http://www.omdbapi.com/?s=Batman&apikey=477f590b")
-        URLSession.shared.dataTask(with: url!){data, response, error in
-            
-            if error != nil{
-                print(error!)
-                return
-            }
-            
-            //check for valid json response
-            do{
-                let json = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
-                
-                if let totalResults = json as? [String: AnyObject]{
-                    
-                    self.artists = [Artist]()
-                    for dictionary in totalResults["Search"] as! [[String: AnyObject]]{
-                        
-                        let artist = Artist()
-                        artist.eventTitle = dictionary["Title"] as? String
-                        artist.eventPlace = "FNB Stadium"
-                        artist.location = "Soccer City Ave, Nasrec, Johannesburg"
-                        artist.artistName = "Batman"
-                        artist.dateTime = "Tonight: 8pm till late "
-                        artist.thumbnailImage = dictionary["Poster"] as? String
-                        artist.userProfileImage = dictionary["Poster"] as? String
-                        self.artists?.append(artist)
-                        
-                    }
-                }
-                DispatchQueue.main.async {
-                     self.collectionView?.reloadData()
-                }
-               
-            }
-            catch let jsonError {
-                //hande malformed error response
-                print(jsonError)
-            }
-            
-            
-            }.resume()
-        
-    }
+   
+    let cellId = "cellId"
+    let clubCellId = "clubCellId"
+    let eventsCellId = "eventCellId"
+    let titles = ["Celebrities","Clubs","Events"]
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //get artist
-        fetchArtist()
-        
-        //navigation item title
-        navigationItem.title = "Celebrities"
         navigationController?.navigationBar.isTranslucent = false
         let titleLabel = UILabel(frame: CGRect(x: 0, y: 0, width: view.frame.width - 32, height: view.frame.height))
         titleLabel.text = "Celebrities"
@@ -72,30 +26,52 @@ class HomeController: UICollectionViewController,UICollectionViewDelegateFlowLay
         titleLabel.font = UIFont.systemFont(ofSize: 20)
         navigationItem.titleView = titleLabel
         
-        //set background color
-        collectionView?.backgroundColor = UIColor.white
-        
-        //register cell class
-        collectionView?.register(ArtistCell.self, forCellWithReuseIdentifier: "cellId")
-        
-        //push the content and scroll to accomodate our custom menu bar
-        collectionView?.contentInset = UIEdgeInsets(top: 50, left: 0, bottom: 0, right: 0)
-        collectionView?.scrollIndicatorInsets = UIEdgeInsets(top: 50, left: 0, bottom: 0, right: 0)
-        
+
+        setupCollectionView()
         setupMenuBar()
         setupMenuButtons()
     
     }
     
-    let menuBar: MenuBar = {
+    func setupCollectionView(){
+        //set background color
+        collectionView?.backgroundColor = UIColor.white
+        
+        if let flowLayout = collectionView?.collectionViewLayout as? UICollectionViewFlowLayout{
+            flowLayout.scrollDirection = .horizontal
+            flowLayout.minimumLineSpacing = 0
+        }
+        
+        //register artist cell class
+        //collectionView?.register(ArtistCell.self, forCellWithReuseIdentifier: "cellId")
+        
+        //collectionView?.register(UICollectionViewCell.self, forCellWithReuseIdentifier: cellId)
+        
+        collectionView?.register(SeedCell.self, forCellWithReuseIdentifier: cellId)
+        collectionView?.register(ClubCell.self, forCellWithReuseIdentifier: clubCellId)
+        collectionView?.register(EventsCell.self, forCellWithReuseIdentifier: eventsCellId)
+        
+        //push the content and scroll to accomodate our custom menu bar
+        collectionView?.contentInset = UIEdgeInsets(top: 50, left: 0, bottom: 0, right: 0)
+        collectionView?.scrollIndicatorInsets = UIEdgeInsets(top: 50, left: 0, bottom: 0, right: 0)
+        
+        collectionView?.isPagingEnabled = true
+    }
+    
+    lazy var menuBar: MenuBar = {
         let bar = MenuBar()
+        bar.homeController = self
         return bar
     }()
     
     private func setupMenuBar(){
+//        navigationController?.hidesBarsOnSwipe = true
+//        menuBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
+        
         view.addSubview(menuBar)
         view.addConstraintsWithFormat(format: "H:|[v0]|", views: menuBar)
         view.addConstraintsWithFormat(format: "V:|[v0(50)]", views: menuBar)
+
     }
     
     func setupMenuButtons(){
@@ -120,13 +96,18 @@ class HomeController: UICollectionViewController,UICollectionViewDelegateFlowLay
     }
 
     @objc func handleSearchButtonTap() {
-        print("SEARCH")
+       print("search")
     }
     
+    func scrollToItemAtIndex(index: Int){
+        let indexPath = IndexPath(item: index, section: 0)
+        collectionView?.scrollToItem(at: indexPath, at: [], animated: true)
+        setTitleForIndex(index: index)
+    }
 
     func showSettingViewController(menu: Menu) {
         let controller = UIViewController()
-        controller.navigationItem.title = menu.name
+        controller.navigationItem.title = menu.name.rawValue
         controller.view.backgroundColor = UIColor.white
         navigationController?.navigationBar.tintColor = UIColor.white
         navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor: UIColor.white]
@@ -138,29 +119,55 @@ class HomeController: UICollectionViewController,UICollectionViewDelegateFlowLay
         super.didReceiveMemoryWarning()
     }
     
-    //return number of rows in table
-    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-     
-        //return count otherwise 0
-        return artists?.count ?? 0
-        
+    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        menuBar.horizontalBarLeftConstrain?.constant = scrollView.contentOffset.x / 3
+    }
+
+    
+    private func setTitleForIndex(index: Int){
+        if let titleLabel = navigationItem.titleView as? UILabel {
+            titleLabel.text = titles[index]
+        }
     }
     
-    //return each cell
-    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cellId", for: indexPath) as! ArtistCell
+    override func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
         
-        cell.artist = artists?[indexPath.item]
+        let index = targetContentOffset.pointee.x / view.frame.width
+        let indexPath = IndexPath(item: Int(index), section: 0)
+        menuBar.collectionView.selectItem(at: indexPath, animated: true, scrollPosition: [])
+        
+        setTitleForIndex(index: Int(index))
+
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 3
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
+        let cellIdentifier: String
+        
+        if indexPath.item == 1 {
+            cellIdentifier = clubCellId
+        }
+        else if indexPath.item == 2 {
+            cellIdentifier = eventsCellId
+        }
+        else{
+            cellIdentifier = cellId
+        }
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellIdentifier, for: indexPath)
         
         return cell
+
     }
     
-    //set height for each cell
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let height = (view.frame.width - 16 - 16) * 9 / 16
-        
-        return CGSize(width: view.frame.width, height: height + 16 + 88)
+        return CGSize(width: view.frame.width, height: view.frame.height - 50)
     }
+    
+
 }
 
 

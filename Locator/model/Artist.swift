@@ -16,7 +16,5 @@ class Artist: NSObject {
     var eventPlace: String?
     var dateTime: String?
     var location: String?
-    
 
-    
 }

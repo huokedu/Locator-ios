@@ -19,6 +19,8 @@ class MenuBar: UIView, UICollectionViewDataSource,UICollectionViewDelegate, UICo
         return view
     }()
     
+    var homeController: HomeController?
+    
     let cellId = "cellId"
     let menuImageNames = ["artist", "club", "event"]
     
@@ -33,6 +35,22 @@ class MenuBar: UIView, UICollectionViewDataSource,UICollectionViewDelegate, UICo
         let selectedIndexPath = IndexPath(item: 0, section: 0)
         collectionView.selectItem(at: selectedIndexPath, animated: false, scrollPosition: [])
 
+        setupHorizontalBar()
+    }
+    
+    var horizontalBarLeftConstrain: NSLayoutConstraint?
+    func setupHorizontalBar(){
+        let horizontalBarView = UIView()
+        horizontalBarView.backgroundColor = UIColor(white: 0.95, alpha: 1)
+        horizontalBarView.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(horizontalBarView)
+        
+        horizontalBarLeftConstrain = horizontalBarView.leftAnchor.constraint(equalTo: self.leftAnchor)
+        horizontalBarLeftConstrain?.isActive = true
+        horizontalBarView.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
+        horizontalBarView.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 1/4).isActive = true
+        horizontalBarView.heightAnchor.constraint(equalToConstant: 4).isActive = true
+ 
     }
     
     
@@ -47,6 +65,12 @@ class MenuBar: UIView, UICollectionViewDataSource,UICollectionViewDelegate, UICo
     //spacing between each cell
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return 0
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let currentCell = CGFloat(indexPath.item) * frame.width / 3
+        horizontalBarLeftConstrain?.constant = currentCell
+        homeController?.scrollToItemAtIndex(index: indexPath.item)
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {

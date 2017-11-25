@@ -8,11 +8,17 @@
 
 import UIKit
 class Menu: NSObject {
-    let name: String
+    let name: MenuName
     let imageName: String
     
-    init(name: String, imageName: String) {
+    init(name: MenuName, imageName: String) {
         self.name = name
         self.imageName = imageName
     }
+}
+//type safe menus
+enum MenuName: String {
+    case Settings = "Settings"
+    case Help = "Help"
+    case Feedback = "Feedback"
 }
